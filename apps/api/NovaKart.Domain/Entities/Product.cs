@@ -16,6 +16,8 @@ public class Product
 
     public bool IsActive { get; set; }
 
+    public ProductImage Image { get; set; } = null!;
+
     public ProductCategory Category { get; set; } = null!;
 
     public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
