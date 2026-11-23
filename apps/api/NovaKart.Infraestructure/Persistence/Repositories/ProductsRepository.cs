@@ -36,8 +36,10 @@ namespace NovaKart.Infraestructure.Persistence.Repositories
             decimal? maxPrice = null,
             bool? isActive = null)
         {
-            var query = _products.AsNoTracking().Include(p => p.Category)
-            .AsQueryable();
+            var query = _products.AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Image)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {

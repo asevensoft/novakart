@@ -3,6 +3,7 @@ using Mediator;
 using NovaKart.Application.Common;
 using NovaKart.Application.Dtos.Categories;
 using NovaKart.Application.Dtos.Products;
+using NovaKart.Application.Dtos.ProductImage;
 using NovaKart.Domain.Interfaces;
 
 namespace NovaKart.Application.Features.Products.Query.GetProducts
@@ -35,7 +36,9 @@ namespace NovaKart.Application.Features.Products.Query.GetProducts
                 p.Price,
                 p.Stock,
                 p.IsActive,
-                new ProductCategoryDto(p.Category.Id, p.Category.Name)))
+                new ProductCategoryDto(p.Category.Id, p.Category.Name),
+                new ProductImageDto(p.Image.Id, p.Image.Url, p.Image.AltText)
+                ))
                 .ToList();
 
             return new GetProductsResponse(products, totalCount, request.PageNumber, request.PageSize);

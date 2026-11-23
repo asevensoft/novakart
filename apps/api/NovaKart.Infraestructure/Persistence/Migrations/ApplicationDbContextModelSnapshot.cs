@@ -176,6 +176,37 @@ namespace NovaKart.Infraestructure.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("NovaKart.Domain.Entities.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AltText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ProductId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.HasIndex("ProductId1")
+                        .IsUnique();
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("NovaKart.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -290,6 +321,21 @@ namespace NovaKart.Infraestructure.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("NovaKart.Domain.Entities.ProductImage", b =>
+                {
+                    b.HasOne("NovaKart.Domain.Entities.Product", "Product")
+                        .WithOne()
+                        .HasForeignKey("NovaKart.Domain.Entities.ProductImage", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NovaKart.Domain.Entities.Product", null)
+                        .WithOne("Image")
+                        .HasForeignKey("NovaKart.Domain.Entities.ProductImage", "ProductId1");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("NovaKart.Domain.Entities.Cart", b =>
                 {
                     b.Navigation("Items");
@@ -303,6 +349,9 @@ namespace NovaKart.Infraestructure.Migrations
             modelBuilder.Entity("NovaKart.Domain.Entities.Product", b =>
                 {
                     b.Navigation("CartItems");
+
+                    b.Navigation("Image")
+                        .IsRequired();
 
                     b.Navigation("OrderItems");
                 });

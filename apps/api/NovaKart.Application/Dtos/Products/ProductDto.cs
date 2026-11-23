@@ -1,4 +1,5 @@
 using NovaKart.Application.Dtos.Categories;
+using NovaKart.Application.Dtos.ProductImage;
 
 namespace NovaKart.Application.Dtos.Products;
 
@@ -9,7 +10,8 @@ public record ProductDto(
     decimal Price,
     int Stock,
     bool IsActive,
-    ProductCategoryDto Category);
+    ProductCategoryDto Category,
+    ProductImageDto ProductImage);
 
 public record GetProductsResponse(
     List<ProductDto> Products,
