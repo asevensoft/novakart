@@ -189,9 +189,6 @@ namespace NovaKart.Infraestructure.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ProductId1")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
@@ -199,9 +196,6 @@ namespace NovaKart.Infraestructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId")
-                        .IsUnique();
-
-                    b.HasIndex("ProductId1")
                         .IsUnique();
 
                     b.ToTable("ProductImages");
@@ -324,14 +318,10 @@ namespace NovaKart.Infraestructure.Migrations
             modelBuilder.Entity("NovaKart.Domain.Entities.ProductImage", b =>
                 {
                     b.HasOne("NovaKart.Domain.Entities.Product", "Product")
-                        .WithOne()
+                        .WithOne("Image")
                         .HasForeignKey("NovaKart.Domain.Entities.ProductImage", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("NovaKart.Domain.Entities.Product", null)
-                        .WithOne("Image")
-                        .HasForeignKey("NovaKart.Domain.Entities.ProductImage", "ProductId1");
 
                     b.Navigation("Product");
                 });
