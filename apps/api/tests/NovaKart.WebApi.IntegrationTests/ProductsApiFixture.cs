@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NovaKart.Infraestructure;
+using NovaKart.Domain.Entities;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -37,7 +38,21 @@ public sealed class ProductsApiFixture : IAsyncLifetime
 
         await db.Database.MigrateAsync();
         await db.Database.ExecuteSqlRawAsync(ReadSeedScript());
+
+        var products = await db.Products.AsNoTracking().ToListAsync();
+        db.ProductImages.AddRange(products.Select(product => new ProductImage
+        {
+            Id = GetImageId(product.Id),
+            ProductId = product.Id,
+            Url = GetImageUrl(product.Id),
+            AltText = product.Name
+        }));
+        await db.SaveChangesAsync();
     }
+
+    public static Guid GetImageId(Guid productId) => new("d" + productId.ToString()[1..]);
+
+    public static string GetImageUrl(Guid productId) => $"https://images.example.com/products/{productId}.jpg";
 
     public async Task DisposeAsync()
     {
