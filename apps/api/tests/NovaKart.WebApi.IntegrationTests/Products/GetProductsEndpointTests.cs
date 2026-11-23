@@ -70,6 +70,21 @@ public sealed class GetProductsEndpointTests
     }
 
     [Fact]
+    public async Task EveryProduct_CarriesItsImage()
+    {
+        var result = await GetProductsAsync(Url);
+
+        Assert.Equal(Seeded.TotalProducts, result.Products.Count);
+        Assert.All(result.Products, product =>
+        {
+            Assert.NotNull(product.ProductImage);
+            Assert.Equal(ProductsApiFixture.GetImageId(product.Id), product.ProductImage.Id);
+            Assert.Equal(ProductsApiFixture.GetImageUrl(product.Id), product.ProductImage.Url);
+            Assert.Equal(product.Name, product.ProductImage.AltText);
+        });
+    }
+
+    [Fact]
     public async Task Response_IsCamelCaseJson()
     {
         using var response = await _client.GetAsync(Url);
@@ -93,6 +108,11 @@ public sealed class GetProductsEndpointTests
         Assert.True(first.TryGetProperty("stock", out _));
         Assert.True(first.TryGetProperty("isActive", out _));
         Assert.True(first.TryGetProperty("category", out _));
+        Assert.True(first.TryGetProperty("productImage", out var image));
+        Assert.Equal(JsonValueKind.Object, image.ValueKind);
+        Assert.True(image.TryGetProperty("id", out _));
+        Assert.True(image.TryGetProperty("url", out _));
+        Assert.True(image.TryGetProperty("altText", out _));
     }
 
     [Fact]
